@@ -10,11 +10,11 @@ dhprimes_file_server: "{{ openvpn_dir }}/dh{{dhprimes_bitlength}}.pem"
 openvpn_dir: /etc/openvpn
 openvpn_user: openvpn
 openvpn_port: 1194
-openvpn_ca_file: "{{ openvpn_dir }}/ca.crt"
-openvpn_crt_fil: "{{ openvpn_dir }}/server.crt"
-openvpn_key_file: "{{ openvpn_dir }}/server.key"
-openvpn_ta_file: "{{ openvpn_dir }}/ta.crt"  # for HMAC
 openvpn_server_name: "{{ inventory_hostname }}"
+openvpn_ca_file: "{{ openvpn_dir }}/ca.crt"
+openvpn_crt_file: "{{ openvpn_dir }}/{{ openvpn_server_name }}.crt"
+openvpn_key_file: "{{ openvpn_dir }}/{{ openvpn_server_name }}.key"
+openvpn_ta_file: "{{ openvpn_dir }}/ta.crt"  # for HMAC
 
 # easy-rsa - ansible local
 use_easy_rsa: true

@@ -4,7 +4,7 @@ root_common_name: test_openvpn
 
 # diffie helman primes - to avoid using the default ones
 dhprimes_bitlength: 4096
-dhprimes_file: "{{ openvpn_dir }}/local_dhprimes.pem"
+dhprimes_file_server: "{{ openvpn_dir }}/dh{{dhprimes_bitlength}}.pem"
 
 # openvpn params - on server
 openvpn_dir: /etc/openvpn
@@ -14,6 +14,7 @@ openvpn_ca_file: "{{ openvpn_dir }}/ca.crt"
 openvpn_crt_fil: "{{ openvpn_dir }}/server.crt"
 openvpn_key_file: "{{ openvpn_dir }}/server.key"
 openvpn_ta_file: "{{ openvpn_dir }}/ta.crt"  # for HMAC
+openvpn_server_name: "{{ inventory_hostname }}"
 
 # easy-rsa - ansible local
 use_easy_rsa: true
@@ -26,8 +27,11 @@ easy_rsa_keys:
   organization: "Fort-Funston"
   email: "me@myhost.mydomain"
   organizational_unit: "MyOrganizationalUnit"
+  name: VPN certificates
+  alt_name: .
 easy_rsa_key_dir: "{{ easy_rsa_dir }}/keys"
 easy_rsa_ca_file: "{{ easy_rsa_key_dir }}/ca.key"
 easy_rsa_crt_file: "{{ easy_rsa_key_dir }}/ca.crt"
-#easy_rsa_key_file: "{{ easy_rsa_key_dir }}/ta.key"
+easy_rsa_key_file: "{{ easy_rsa_key_dir }}/{{ openvpn_server_name }}.key"
 easy_rsa_ta_file: "{{ easy_rsa_key_dir }}/ta.key"
+easy_rsa_dh_file: "{{ easy_rsa_key_dir }}/dh{{dhprimes_bitlength}}.pem"

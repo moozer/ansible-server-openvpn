@@ -38,7 +38,7 @@ export PKCS11_PIN="dummy"
 # down TLS negotiation performance
 # as well as the one-time DH parms
 # generation process.
-export KEY_SIZE=2048
+export KEY_SIZE={{ dhprimes_bitlength }}
 
 # In how many days should the root CA key expire?
 export CA_EXPIRE=3650
@@ -57,7 +57,8 @@ export KEY_EMAIL="{{ easy_rsa_keys.email }}"
 export KEY_OU="{{ easy_rsa_keys.organizational_unit }}"
 
 # X509 Subject Field
-export KEY_NAME="EasyRSA"
+export KEY_NAME="{{ easy_rsa_keys.name }}"
+export KEY_ALTNAMES="{{ easy_rsa_keys.alt_name }}"
 
 # PKCS11 Smart Card
 # export PKCS11_MODULE_PATH="/usr/lib/changeme.so"
@@ -65,4 +66,4 @@ export KEY_NAME="EasyRSA"
 
 # If you'd like to sign all keys with the same Common Name, uncomment the KEY_CN export below
 # You will also need to make sure your OpenVPN server config has the duplicate-cn option set
-export KEY_CN="{{ root_common_name }}"
+#export KEY_CN="{{ root_common_name }}"

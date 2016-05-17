@@ -23,14 +23,35 @@
 - name: create keys dir
   file: state=directory dest={{ easy_rsa_key_dir }} mode=0700
 
+- name: create empty index file
+  command: "touch {{ easy_rsa_key_dir }}/index.txt"
+  args:
+    creates: "{{ easy_rsa_key_dir }}/index.txt"
+
+- name: create serial minimal serial
+  shell: "cd {{ easy_rsa_key_dir }} && echo 01 >> serial"
+  args:
+    creates: "{{ easy_rsa_key_dir }}/serial"
+
+- name: generate dh file
+  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./build-dh"
+  args:
+    creates: "{{ easy_rsa_dh_file }}"
+
+- name: generate CA key file
+  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --initca --batch"
+  args:
+    creates: "{{ easy_rsa_ca_file }}"
+
+- name: generate server key file
+  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --server {{ openvpn_server_name }} --batch"
+  args:
+    creates: "{{ easy_rsa_key_file }}"
+
 - name: generate HMAC key file
   shell: /usr/sbin/openvpn --genkey --secret {{ easy_rsa_ta_file }}
   args:
     creates: "{{ easy_rsa_ta_file }}"
 
-- name: generate CA key file
-  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./build-ca --batch"
-  args:
-    creates: "{{ easy_rsa_ca_file }}"
 
-
+  

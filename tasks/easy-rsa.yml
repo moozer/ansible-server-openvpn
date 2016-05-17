@@ -4,6 +4,7 @@
   apt: name={{ item }} state=present
   with_items: 
   - easy-rsa
+  - openvpn
   
 - name: check easy-rsa state
   stat: path={{ easy_rsa_dir }}
@@ -18,3 +19,14 @@
 
 - name: create vars file
   template: src=vars.j2 dest="{{ easy_rsa_dir }}/vars"
+
+- name: create keys dir
+  file: state=directory dest={{ easy_rsa_key_dir }} mode=0700
+
+- name: check HMAC key state
+  stat: path={{ easy_rsa_ta_file }}
+  register: easy_rsa_ta_installed
+
+- name: generate HMAC key file
+  shell: /usr/sbin/openvpn --genkey --secret {{ easy_rsa_ta_file }}
+  when: not easy_rsa_ta_installed.stat.exists

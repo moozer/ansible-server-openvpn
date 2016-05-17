@@ -10,6 +10,7 @@ openvpn_port: 1194
 openvpn_ca_file: "{{ openvpn_dir }}/ca.crt"
 openvpn_crt_fil: "{{ openvpn_dir }}/server.crt"
 openvpn_key_file: "{{ openvpn_dir }}/server.key"
+openvpn_ta_file: "{{ openvpn_dir }}/ta.crt"  # for HMAC
 
 # easy-rsa - ansible local
 use_easy_rsa: true
@@ -22,3 +23,5 @@ easy_rsa_keys:
   organization: "Fort-Funston"
   email: "me@myhost.mydomain"
   organizational_unit: "MyOrganizationalUnit"
+easy_rsa_key_dir: "{{ easy_rsa_dir }}/keys"
+easy_rsa_ta_file: "{{ easy_rsa_key_dir }}/ta.key"

@@ -23,10 +23,14 @@
 - name: create keys dir
   file: state=directory dest={{ easy_rsa_key_dir }} mode=0700
 
-- name: check HMAC key state
-  stat: path={{ easy_rsa_ta_file }}
-  register: easy_rsa_ta_installed
-
 - name: generate HMAC key file
   shell: /usr/sbin/openvpn --genkey --secret {{ easy_rsa_ta_file }}
-  when: not easy_rsa_ta_installed.stat.exists
+  args:
+    creates: "{{ easy_rsa_ta_file }}"
+
+- name: generate CA key file
+  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./build-ca --batch"
+  args:
+    creates: "{{ easy_rsa_ca_file }}"
+
+

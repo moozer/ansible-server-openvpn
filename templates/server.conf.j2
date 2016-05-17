@@ -177,6 +177,7 @@ keepalive 10 120
 # The second parameter should be '0'
 # on the server and '1' on the clients.
 tls-auth {{ openvpn_ta_file }} 0 # This file is secret
+tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
 
 # Select a cryptographic cipher.
 # This config item must be copied to
@@ -184,6 +185,8 @@ tls-auth {{ openvpn_ta_file }} 0 # This file is secret
 ;cipher BF-CBC        # Blowfish (default)
 ;cipher AES-128-CBC   # AES
 ;cipher DES-EDE3-CBC  # Triple-DES
+cipher AES-256-CBC
+auth SHA512
 
 # Enable compression on the VPN link.
 # If you enable it here, you must also

@@ -1,9 +1,33 @@
 # test provisioning corresponding to the Vagrantfile
 
-- hosts: all
+- hosts: server-vpn
   user: vagrant
   become: no
   become_method: sudo
 
   roles:
-#  - { role: server-kvm } 
+  - { role: server-openvpn } 
+
+
+- hosts: server-ext
+  user: vagrant
+  become: no
+  become_method: sudo
+
+#  roles:
+#  - { role: server-openvpn } 
+
+  tasks:
+  - debug: msg="external client"
+
+
+- hosts: server-int
+  user: vagrant
+  become: no
+  become_method: sudo
+
+#  roles:
+#  - { role: server-openvpn } 
+
+  tasks:
+  - debug: msg="internal client"

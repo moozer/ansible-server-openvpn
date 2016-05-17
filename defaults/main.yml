@@ -4,3 +4,21 @@
 dhprimes_bitlength: 4096
 dhprimes_file: /etc/openvpn/local_dhprimes.epm
 
+# openvpn params
+openvpn_dir: /etc/openvpn
+openvpn_port: 1194
+openvpn_ca_file: "{{ openvpn_dir }}/ca.crt"
+openvpn_crt_fil: "{{ openvpn_dir }}/server.crt"
+openvpn_key_file: "{{ openvpn_dir }}/server.key"
+
+# easy-rsa
+use_easy_rsa: true
+#easy_rsa_host: localhost - we use "connection: local"
+easy_rsa_dir: tmp/easy-rsa
+easy_rsa_keys:
+- country: "US"
+- province: "CA"
+- city: "SanFrancisco"
+- organisation: "Fort-Funston"
+- email: "me@myhost.mydomain"
+- organizational_unit: "MyOrganizationalUnit"

@@ -1,0 +1,16 @@
+# easy rsa certificate handling
+
+- name: installing easy-rsa
+  apt: name={{ item }} state=present
+  with_items: 
+  - easy-rsa
+  
+- name: check easy-rsa state
+  stat: path={{ easy_rsa_dir }}
+  register: easy_rsa_installed
+
+- name: create CA
+  shell: make-cadir {{ easy_rsa_dir }}
+  when: not easy_rsa_installed.stat.exists
+  
+

@@ -4,7 +4,7 @@
   become: no
   connection: local
   include: easy-rsa.yml
-  when: use_easy_rsa
+  when: "{{ use_easy_rsa }}"
 
 - name: include openvpn tasks
   become: yes

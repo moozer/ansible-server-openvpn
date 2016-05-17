@@ -10,7 +10,11 @@
   register: easy_rsa_installed
 
 - name: create CA
-  shell: make-cadir {{ easy_rsa_dir }}
+  shell: make-cadir "{{ easy_rsa_dir }}"
   when: not easy_rsa_installed.stat.exists
   
+- name: create symlink
+  file: src="openssl-1.0.0.cnf" dest="{{ easy_rsa_dir }}/openssl.cnf" state=link
 
+- name: create vars file
+  template: src=vars.j2 dest="{{ easy_rsa_dir }}/vars"

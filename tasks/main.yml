@@ -5,8 +5,10 @@
   connection: local
   include: easy-rsa.yml
   when: "{{ use_easy_rsa }}"
+  tags: ca
 
 - name: include openvpn tasks
   become: yes
   include: openvpn.yml
+  tags: server
 

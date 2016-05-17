@@ -1,0 +1,9 @@
+# test provisioning corresponding to the Vagrantfile
+
+- hosts: all
+  user: vagrant
+  become: no
+  become_method: sudo
+
+  roles:
+#  - { role: server-kvm } 

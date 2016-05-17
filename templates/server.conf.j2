@@ -199,8 +199,8 @@ comp-lzo
 #
 # You can uncomment this out on
 # non-Windows systems.
-;user nobody
-;group nogroup
+user {{ openvpn_user }}
+group nogroup
 
 # The persist options will try to avoid
 # accessing certain resources on restart

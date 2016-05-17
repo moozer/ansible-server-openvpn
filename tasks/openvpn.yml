@@ -13,3 +13,6 @@
 - name: generating new dh primes
   shell: openssl dhparam -out {{ dhprimes_file }} {{ dhprimes_bitlength }}
   when: not dhprimes_exists.stat.exists
+
+- name: add open vpn user
+  user: name={{ openvpn_user }} shell=/usr/sbin/nologin createhome=no

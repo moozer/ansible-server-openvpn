@@ -1,0 +1,6 @@
+# default values...
+
+# diffie helman primes - to avoid using the default ones
+dhprimes_bitlength: 4096
+dhprimes_file: /etc/openvpn/local_dhprimes.epm
+

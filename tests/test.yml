@@ -5,6 +5,10 @@
   become: no
   become_method: sudo
 
+  vars:
+  - dhprimes_bitlength: 1024 # sufficient to check if it works.
+
+
   roles:
   - { role: server-openvpn } 
 

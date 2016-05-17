@@ -1,0 +1,15 @@
+# setup openvpn
+
+- name: install openvpn packages
+  apt: name={{ item }} state=present
+  with_items:
+  - openvpn
+  tags: openvpn
+
+- name: check for existing custom dh primes
+  stat: path={{ dhprimes_file }}
+  register: dhprimes_exists
+
+- name: generating new dh primes
+  shell: openssl dhparam -out {{ dhprimes_file }} {{ dhprimes_bitlength }}
+  when: not dhprimes_exists.stat.exists

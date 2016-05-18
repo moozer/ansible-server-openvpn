@@ -24,10 +24,12 @@
   - name: test connectivity - external
     shell: ping -c 1 -I eth1 10.10.0.200
     changed_when: false
+    tags: tests
     
   - name: test connectivity - internal
     shell: ping -c 1 -I eth2 10.10.10.200
     changed_when: false
+    tags: tests
     
   handlers:
   - name: restart networking
@@ -49,10 +51,17 @@
   - name: test connectivity
     shell: ping -c 1 -I eth1 10.10.0.5
     changed_when: false
+    tags: tests
 
-  - name: test connectivity through vpn
+  - name: test connectivity through vpn (server)
     shell: ping -c 1 -I tun0 10.10.10.5
     changed_when: false
+    tags: tests
+
+  - name: test connectivity through vpn (server-int)
+    shell: ping -c 1 -I tun0 10.10.10.200
+    changed_when: false
+    tags: tests
 
 - hosts: server-int
   user: vagrant
@@ -69,3 +78,4 @@
   - name: test connectivity
     shell: ping -c 1 -I eth1 10.10.10.5
     changed_when: false
+    tags: tests

@@ -24,7 +24,7 @@
 
 - name: copy config file to server
   template: src=server.conf.j2 dest={{ openvpn_dir }}/server.conf
-  notify: restart openvpn
+  notify: start openvpn
 
 - name: create log dir
   file: path={{ openvpn_log_dir }} state=directory recurse=true
@@ -41,3 +41,13 @@
 
 - name: enable openvpn service
   service: name=openvpn enabled=yes
+
+- name: enable forwarding
+  sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes state=present reload=yes
+
+- name: add nat firewall
+  template: src=fw_nat.sh dest=/etc/fw_nat.sh mode=0700
+
+- name: add firewall to startup
+  lineinfile: dest=/etc/rc.local line="/etc/fw_nat.sh"
+    state=present insertbefore="exit 0"

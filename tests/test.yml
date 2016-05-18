@@ -7,9 +7,11 @@
 
   vars:
   - dhprimes_bitlength: 1024 # sufficient to check if it works.
+  - int_if: { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
+  - ext_if: { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
   - interfaces:
-    - { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
-    - { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
+    - "{{ int_if }}"
+    - "{{ ext_if }}"
   - openvpn_server_connect_name: 10.10.0.5
 
   roles:

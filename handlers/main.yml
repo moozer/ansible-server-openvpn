@@ -1,5 +1,5 @@
-- name: restart openvpn
+- name: start openvpn
   become: yes
-  service: name=openvpn state=restarted
+  service: name=openvpn state=started
   
   

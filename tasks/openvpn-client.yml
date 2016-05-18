@@ -23,6 +23,10 @@
     chdir: /etc/openvpn/
   notify: restart openvpn
 
+- name: create symlink to config file
+  file: state=link src=/etc/openvpn/{{ openvpn_client_conf }} 
+        dest=/etc/openvpn/{{ openvpn_client_conf }}.conf
+
 - name: create log dir
   file: path={{ openvpn_log_dir }} state=directory recurse=true
   
@@ -38,3 +42,4 @@
 
 - name: enable openvpn service
   service: name=openvpn enabled=yes
+

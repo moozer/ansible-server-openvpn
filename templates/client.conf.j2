@@ -25,4 +25,7 @@ auth SHA512
 
 comp-lzo
 
+;log         openvpn.log
+log-append  {{ openvpn_log_dir }}/{{ openvpn_log_file }}
+status {{ openvpn_log_dir }}/{{ openvpn_status_log_file }}
 verb 3

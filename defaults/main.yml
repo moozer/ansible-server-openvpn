@@ -27,6 +27,9 @@ openvpn_status_log_file: openvpn-status.log
 
 openvpn_client_conf: "{{ root_common_name }}.ovpn"
 
+int_if: {interface: eth1}
+ext_if: {interface: eth2}
+
 # easy-rsa - ansible local
 use_easy_rsa: true
 #easy_rsa_host: localhost - we use "connection: local"

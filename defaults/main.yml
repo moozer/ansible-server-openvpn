@@ -14,6 +14,7 @@ openvpn_dir: /etc/openvpn
 openvpn_user: openvpn
 openvpn_port: 1194
 openvpn_server_name: "{{ inventory_hostname }}"
+openvpn_server_connect_name: "{{ openvpn_server_name }}"
 
 openvpn_ca_crt_file: "{{ openvpn_dir }}/ca.crt"
 openvpn_server_crt_file: "{{ openvpn_dir }}/{{ openvpn_server_name }}.crt"
@@ -24,6 +25,7 @@ openvpn_log_dir: /var/log/openvpn
 openvpn_log_file: openvpn.log
 openvpn_status_log_file: openvpn-status.log
 
+openvpn_client_conf: "{{ root_common_name }}.ovpn"
 
 # easy-rsa - ansible local
 use_easy_rsa: true

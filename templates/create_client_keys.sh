@@ -20,8 +20,9 @@ if [ ! -e $tarball ]; then
     echo "Creating tarball..."
     tmpdir=/tmp/client-tar.$$
     mkdir $tmpdir
-    cp company.ovpn $tmpdir/company.ovpn
+    cp {{ openvpn_client_conf }} $tmpdir/{{ openvpn_client_conf }}
     cp keys/ca.crt $tmpdir 
+    cp keys/ta.key $tmpdir 
     cp keys/$client.key $tmpdir/client.key
     cp keys/$client.crt $tmpdir/client.crt
     tar -C $tmpdir -czvf $tarball .

@@ -55,6 +55,11 @@
     creates: "{{ easy_rsa_ta_crt_file }}"
 
 - name: copy client creation script
-  template: src={{ easy_rsa_client_creation_filename }}
-            dest={{ easy_rsa_client_creation_script }}
+  template: src={{ easy_rsa_client_creation_script }}
+            dest={{easy_rsa_dir}}/{{ easy_rsa_client_creation_script }}
+            mode=0755
+
+- name: create ovpn file
+  template: src=client.conf.j2
+            dest={{easy_rsa_dir}}/{{ openvpn_client_conf }}
             mode=0755

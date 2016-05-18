@@ -21,7 +21,7 @@
   shell: "tar -xvf {{ easy_rsa_client_name }}.tgz"
   args:
     chdir: /etc/openvpn/
-  notify: restart openvpn
+  notify: start openvpn client
 
 - name: create symlink to config file
   file: state=link src=/etc/openvpn/{{ openvpn_client_conf }} 
@@ -40,6 +40,6 @@
   args:
     creates: "{{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
 
-- name: enable openvpn service
-  service: name=openvpn enabled=yes
+- name: enable openvpn service - client
+  service: name="{{ openvpn_service_client }}" enabled=yes
 

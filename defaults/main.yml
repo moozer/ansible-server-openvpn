@@ -26,6 +26,9 @@ openvpn_log_file: openvpn.log
 openvpn_status_log_file: openvpn-status.log
 
 openvpn_client_conf: "{{ root_common_name }}.ovpn"
+openvpn_conf_name: server
+openvpn_service_server: "openvpn@{{openvpn_conf_name}}"
+openvpn_service_client: "openvpn@{{openvpn_client_conf}}"
 
 int_if: {interface: eth1}
 ext_if: {interface: eth2}

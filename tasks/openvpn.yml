@@ -23,8 +23,8 @@
     - { src: "{{ easy_rsa_server_key_file }}", dest: "{{ openvpn_server_key_file }}" }
 
 - name: copy config file to server
-  template: src=server.conf.j2 dest={{ openvpn_dir }}/server.conf
-  notify: start openvpn
+  template: src=server.conf.j2 dest={{ openvpn_dir }}/{{ openvpn_conf_name }}.conf
+  notify: start openvpn server
 
 - name: create log dir
   file: path={{ openvpn_log_dir }} state=directory recurse=true
@@ -40,7 +40,7 @@
     creates: "{{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
 
 - name: enable openvpn service
-  service: name=openvpn enabled=yes
+  service: name="openvpn@{{ openvpn_conf_name }}" enabled=yes
 
 - name: enable forwarding
   sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes state=present reload=yes

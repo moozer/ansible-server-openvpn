@@ -7,11 +7,32 @@
 
   vars:
   - dhprimes_bitlength: 1024 # sufficient to check if it works.
-
+  - interfaces:
+    - { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
+    - { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
 
   roles:
   - { role: server-openvpn } 
 
+  tasks:
+  - name: set ips
+    become: yes
+    include: tasks/setupInterfaces.yml
+
+  post_tasks:
+  - name: test connectivity - external
+    shell: ping -c 1 -I eth1 10.10.0.200
+    changed_when: false
+    
+  - name: test connectivity - internal
+    shell: ping -c 1 -I eth2 10.10.10.200
+    changed_when: false
+    
+
+  handlers:
+  - name: restart networking
+    become: yes
+    service: name=networking state=restarted
 
 - hosts: server-ext
   user: vagrant

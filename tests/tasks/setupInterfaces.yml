@@ -1,0 +1,5 @@
+- name: set up network interfaces
+  template: src=templates/network_interface.j2
+            dest="/etc/network/interfaces.d/{{ item.interface }}"
+  with_items: "{{interfaces}}"
+  notify: restart networking

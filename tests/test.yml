@@ -28,7 +28,6 @@
     shell: ping -c 1 -I eth2 10.10.10.200
     changed_when: false
     
-
   handlers:
   - name: restart networking
     become: yes
@@ -45,6 +44,11 @@
   tasks:
   - debug: msg="external client"
 
+  post_tasks:
+  - name: test connectivity
+    shell: ping -c 1 -I eth1 10.10.0.5
+    changed_when: false
+
 
 - hosts: server-int
   user: vagrant
@@ -56,3 +60,8 @@
 
   tasks:
   - debug: msg="internal client"
+
+  post_tasks:
+  - name: test connectivity
+    shell: ping -c 1 -I eth1 10.10.10.5
+    changed_when: false

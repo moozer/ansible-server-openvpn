@@ -50,6 +50,9 @@
     shell: ping -c 1 -I eth1 10.10.0.5
     changed_when: false
 
+  - name: test connectivity through vpn
+    shell: ping -c 1 -I tun0 10.10.10.5
+    changed_when: false
 
 - hosts: server-int
   user: vagrant

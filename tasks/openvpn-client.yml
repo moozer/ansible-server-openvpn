@@ -35,3 +35,6 @@
   command: "touch {{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
   args:
     creates: "{{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
+
+- name: enable openvpn service
+  service: name=openvpn enabled=yes

@@ -6,3 +6,6 @@
   become: yes
   service: name={{ openvpn_service_client }} state=started
   
+- name: run rc.local
+  become:yes
+  shell: "sh /etc/rc.local"

@@ -10,6 +10,7 @@
   - interfaces:
     - { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
     - { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
+  - openvpn_server_connect_name: 10.10.0.5
 
   roles:
   - { role: server-openvpn } 
@@ -43,10 +44,6 @@
 
   tasks:
   - debug: msg="external client"
-
-  - name: install openvpn
-    become: yes
-    apt: name=openvpn state=present
 
   post_tasks:
   - name: test connectivity

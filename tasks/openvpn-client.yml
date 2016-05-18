@@ -2,13 +2,23 @@
 
 - name: create keys bundle for client (locally)
   connection: local
+  become: no
   shell: "./{{ easy_rsa_client_creation_script }} {{ easy_rsa_client_name }}"
   args:
     chdir: "{{ easy_rsa_dir }}"
 
-- name: create folder
-  file: path=openvpn state=directory
+- name: install openvpn
+  apt: name=openvpn state=present
+
+#- name: create folder
+#  file: path=openvpn state=directory
 
 - name: copy to client
   copy: src="{{ easy_rsa_client_bundle }}"
-        dest="openvpn/{{ easy_rsa_client_name }}.tgz"
+        dest="/etc/openvpn/{{ easy_rsa_client_name }}.tgz"
+
+- name: extract files
+  shell: "tar -xvf {{ easy_rsa_client_name }}.tgz"
+  args:
+    chdir: /etc/openvpn/
+  notify: restart openvpn

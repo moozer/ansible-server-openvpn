@@ -14,7 +14,7 @@
   tags: server
 
 - name: include openvpn client tasks
-  become: no
+  become: yes
   include: openvpn-client.yml
   when: "{{ include_client }}"
   tags: client

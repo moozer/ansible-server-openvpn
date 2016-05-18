@@ -4,11 +4,18 @@
   become: no
   connection: local
   include: easy-rsa.yml
-  when: "{{ use_easy_rsa }}"
+  when: "{{ use_easy_rsa }} and {{ include_server }}"
   tags: ca
 
-- name: include openvpn tasks
+- name: include openvpn server tasks
   become: yes
   include: openvpn.yml
+  when: "{{ include_server }}"
   tags: server
+
+- name: include openvpn client tasks
+  become: no
+  include: openvpn-client.yml
+  when: "{{ include_client }}"
+  tags: client
 

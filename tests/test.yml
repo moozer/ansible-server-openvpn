@@ -38,11 +38,15 @@
   become: no
   become_method: sudo
 
-#  roles:
-#  - { role: server-openvpn } 
+  roles:
+  - { role: server-openvpn, include_server: false } 
 
   tasks:
   - debug: msg="external client"
+
+  - name: install openvpn
+    become: yes
+    apt: name=openvpn state=present
 
   post_tasks:
   - name: test connectivity

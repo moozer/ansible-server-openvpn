@@ -2,6 +2,9 @@
 
 root_common_name: test_openvpn
 
+include_server: true
+include_client: "not {{ include_server }}"
+
 # diffie helman primes - to avoid using the default ones
 dhprimes_bitlength: 4096
 dhprimes_file_server: "{{ openvpn_dir }}/dh{{dhprimes_bitlength}}.pem"
@@ -26,6 +29,7 @@ openvpn_status_log_file: openvpn-status.log
 use_easy_rsa: true
 #easy_rsa_host: localhost - we use "connection: local"
 easy_rsa_dir: tmp/easy-rsa
+easy_rsa_client_creation_script: create_client_keys.sh
 easy_rsa_keys:
   country: "US"
   province: "CA"
@@ -42,3 +46,6 @@ easy_rsa_server_key_file: "{{ easy_rsa_key_dir }}/{{ openvpn_server_name }}.key"
 easy_rsa_server_crt_file: "{{ easy_rsa_key_dir }}/{{ openvpn_server_name }}.crt"
 easy_rsa_ta_crt_file: "{{ easy_rsa_key_dir }}/ta.key"
 easy_rsa_dh_file: "{{ easy_rsa_key_dir }}/dh{{dhprimes_bitlength}}.pem"
+
+easy_rsa_client_name: "{{ inventory_hostname }}"
+easy_rsa_client_bundle: "{{easy_rsa_dir}}/keys/{{ easy_rsa_client_name }}.tgz"

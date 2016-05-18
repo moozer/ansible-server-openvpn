@@ -1,6 +1,7 @@
 # easy rsa certificate handling
 
 - name: installing easy-rsa
+  #become: yes
   apt: name={{ item }} state=present
   with_items: 
   - easy-rsa
@@ -53,5 +54,7 @@
   args:
     creates: "{{ easy_rsa_ta_crt_file }}"
 
-
-  
+- name: copy client creation script
+  template: src={{ easy_rsa_client_creation_filename }}
+            dest={{ easy_rsa_client_creation_script }}
+            mode=0755

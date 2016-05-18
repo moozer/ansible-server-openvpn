@@ -17,8 +17,14 @@
   copy: src={{ item.src }} dest={{ item.dest }} 
         owner=root group=root mode=0600
   with_items:
-    - { src: "{{ easy_rsa_ta_file }}",  dest: "{{ openvpn_ta_file }}"  }
-    - { src: "{{ easy_rsa_ca_file }}",  dest: "{{ openvpn_ca_file }}"  }    
-    - { src: "{{ easy_rsa_crt_file }}", dest: "{{ openvpn_crt_file }}" }
-    - { src: "{{ easy_rsa_key_file }}", dest: "{{ openvpn_key_file }}" }
+    - { src: "{{ easy_rsa_ta_crt_file }}",  dest: "{{ openvpn_ta_crt_file }}"  }
+    - { src: "{{ easy_rsa_ca_crt_file }}",  dest: "{{ openvpn_ca_crt_file }}"  }    
+    - { src: "{{ easy_rsa_server_crt_file }}", dest: "{{ openvpn_server_crt_file }}" }
+    - { src: "{{ easy_rsa_server_key_file }}", dest: "{{ openvpn_server_key_file }}" }
 
+- name: copy config file to server
+  template: src=server.conf.j2 dest={{ openvpn_dir }}/server.conf
+  notify: restart openvpn
+
+- name: create log dir
+  file: path={{ openvpn_log_dir }} state=directory recurse=true

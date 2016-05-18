@@ -38,20 +38,20 @@
   args:
     creates: "{{ easy_rsa_dh_file }}"
 
-- name: generate CA key file
-  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --initca --batch"
+- name: generate CA key + crt file
+  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --initca"
   args:
-    creates: "{{ easy_rsa_ca_file }}"
+    creates: "{{ easy_rsa_ca_crt_file }}"
 
 - name: generate server key file
-  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --server {{ openvpn_server_name }} --batch"
+  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --server {{ openvpn_server_name }}"
   args:
-    creates: "{{ easy_rsa_key_file }}"
+    creates: "{{ easy_rsa_server_key_file }}"
 
 - name: generate HMAC key file
-  shell: /usr/sbin/openvpn --genkey --secret {{ easy_rsa_ta_file }}
+  shell: /usr/sbin/openvpn --genkey --secret {{ easy_rsa_ta_crt_file }}
   args:
-    creates: "{{ easy_rsa_ta_file }}"
+    creates: "{{ easy_rsa_ta_crt_file }}"
 
 
   

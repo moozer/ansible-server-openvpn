@@ -6,6 +6,7 @@
   shell: "./{{ easy_rsa_client_creation_script }} {{ easy_rsa_client_name }}"
   args:
     chdir: "{{ easy_rsa_dir }}"
+    creates: "keys/{{ easy_rsa_client_name }}.key"
 
 - name: install openvpn
   apt: name=openvpn state=present

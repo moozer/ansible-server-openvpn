@@ -19,10 +19,17 @@
         dest="/etc/openvpn/{{ easy_rsa_client_name }}.tgz"
 
 - name: extract files
-  shell: "tar -xvf {{ easy_rsa_client_name }}.tgz"
-  args:
-    chdir: /etc/openvpn/
+  unarchive: src="/etc/openvpn/{{ easy_rsa_client_name }}.tgz" 
+             dest=/etc/openvpn/ copy=no
+             creates="/etc/openvpn/{{ openvpn_client_conf }}"
   notify: start openvpn client
+
+#~ - name: extract files
+  #~ shell: "tar -xvf {{ easy_rsa_client_name }}.tgz"
+  #~ args:
+    #~ chdir: /etc/openvpn/
+  #~ notify: start openvpn client
+
 
 - name: create symlink to config file
   file: state=link src=/etc/openvpn/{{ openvpn_client_conf }} 

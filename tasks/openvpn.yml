@@ -51,4 +51,4 @@
 - name: add firewall to startup
   lineinfile: dest=/etc/rc.local line="/etc/fw_nat.sh"
     state=present insertbefore="exit 0"
-  notify: rerun rc.local
+  notify: run rc.local

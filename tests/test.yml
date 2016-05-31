@@ -26,11 +26,19 @@
   - name: test connectivity - external
     shell: ping -c 1 -I eth1 10.10.0.200
     changed_when: false
+    register: ping_ext
+    until: ping_ext.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 10
+    delay: 3
     tags: tests
     
   - name: test connectivity - internal
     shell: ping -c 1 -I eth2 10.10.10.200
     changed_when: false
+    register: ping_int
+    until: ping_int.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 10
+    delay: 3
     tags: tests
     
   handlers:
@@ -53,16 +61,28 @@
   - name: test connectivity
     shell: ping -c 1 -I eth1 10.10.0.5
     changed_when: false
+    register: ping_vpn
+    until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 10
+    delay: 3
     tags: tests
 
   - name: test connectivity through vpn (server)
     shell: ping -c 1 -I tun0 10.10.10.5
     changed_when: false
+    register: ping_vpn_tun
+    until: ping_vpn_tun.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 10
+    delay: 3
     tags: tests
 
   - name: test connectivity through vpn (server-int)
     shell: ping -c 1 -I tun0 10.10.10.200
     changed_when: false
+    register: ping_vpn_int
+    until: ping_vpn_int.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 10
+    delay: 3
     tags: tests
 
 - hosts: server-int
@@ -78,6 +98,10 @@
 
   post_tasks:
   - name: test connectivity
-    shell: ping -c 1 -I eth1 10.10.10.5
+    command: ping -c 1 -I eth1 10.10.10.5
     changed_when: false
+    register: ping_vpn
+    until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 10
+    delay: 3
     tags: tests

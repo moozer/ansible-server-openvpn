@@ -3,7 +3,7 @@
 root_common_name: test_openvpn
 
 include_server: true
-include_client: "not {{ include_server }}"
+include_client: not include_server
 
 # diffie helman primes - to avoid using the default ones
 dhprimes_bitlength: 4096

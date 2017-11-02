@@ -6,7 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "deb8-base"
+  config.vm.box = "debian/jessie64"
 
   # -- provider
   config.vm.provider :libvirt do |libvirt|
@@ -18,50 +18,50 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "server-vpn" do |server|
     server.vm.hostname = "server-vpn-test"
 
-    server.vm.network :private_network, 
+    server.vm.network :private_network,
       :ip => "10.10.0.5",
       :libvirt__forward_mode => "nat",
       :libvirt__network_name => "LAN_upstream",
       :auto_config => false,
       :libvirt__dhcp_enabled => false
 
-    server.vm.network :private_network, 
+    server.vm.network :private_network,
       :ip => "10.10.10.5",
       :libvirt__forward_mode => "none",
       :libvirt__network_name => "LAN_A",
       :auto_config => false,
       :libvirt__dhcp_enabled => false
   end
-  
+
   config.vm.define "server-int" do |server|
-    server.vm.hostname = "server-int"  
-    
+    server.vm.hostname = "server-int"
+
     # not setting IP address
     # specifying that DHCP trumps mgnt as gateway
-   server.vm.network :private_network, 
+   server.vm.network :private_network,
       :ip => "10.10.10.200", # dummy IP
       :libvirt__forward_mode => "none",
       :libvirt__network_name => "LAN_A",
       :libvirt__dhcp_enabled => false
-  end  
+  end
 
   config.vm.define "server-ext" do |server|
-    server.vm.hostname = "server-ext"  
-    
+    server.vm.hostname = "server-ext"
+
     # not setting IP address
     # specifying that DHCP trumps mgnt as gateway
-   server.vm.network :private_network, 
+   server.vm.network :private_network,
       :ip => "10.10.0.200", # dummy IP
       :libvirt__forward_mode => "none",
       :libvirt__network_name => "LAN_upstream",
       :libvirt__dhcp_enabled => false
-  end  
-  
+  end
+
   # -- common stuff
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "test.yml"
   end
-  
+
 end

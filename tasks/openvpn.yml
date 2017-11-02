@@ -14,11 +14,11 @@
   user: name={{ openvpn_user }} shell=/usr/sbin/nologin createhome=no
 
 - name: copy keys to server
-  copy: src={{ item.src }} dest={{ item.dest }} 
+  copy: src={{ item.src }} dest={{ item.dest }}
         owner=root group=root mode=0600
   with_items:
     - { src: "{{ easy_rsa_ta_crt_file }}",  dest: "{{ openvpn_ta_crt_file }}"  }
-    - { src: "{{ easy_rsa_ca_crt_file }}",  dest: "{{ openvpn_ca_crt_file }}"  }    
+    - { src: "{{ easy_rsa_ca_crt_file }}",  dest: "{{ openvpn_ca_crt_file }}"  }
     - { src: "{{ easy_rsa_server_crt_file }}", dest: "{{ openvpn_server_crt_file }}" }
     - { src: "{{ easy_rsa_server_key_file }}", dest: "{{ openvpn_server_key_file }}" }
 
@@ -33,7 +33,7 @@
   command: "touch {{ openvpn_log_dir }}/{{ openvpn_log_file }}"
   args:
     creates: "{{ openvpn_log_dir }}/{{ openvpn_log_file }}"
-    
+
 - name: create empty status log file
   command: "touch {{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
   args:
@@ -44,6 +44,19 @@
 
 - name: enable forwarding
   sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes state=present reload=yes
+
+- name: check rc.local
+  stat: path=/etc/rc.local
+  register: rc_local_stat
+
+- name: create rc.local, if not exists
+  template:
+    src: etc_rc.local.j2
+    dest: /etc/rc.local
+    mode: 0755
+    owner: root
+    group: root
+  when: not rc_local_stat.stat.exists
 
 - name: add nat firewall
   template: src=fw_nat.sh dest=/etc/fw_nat.sh mode=0700

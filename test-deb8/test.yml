@@ -7,15 +7,15 @@
 
   vars:
   - dhprimes_bitlength: 1024 # sufficient to check if it works.
-  - int_if: { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
-  - ext_if: { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
+  - int_if: { interface: ens6, ip: 10.10.10.5, netmask: 255.255.255.0 }
+  - ext_if: { interface: ens5, ip: 10.10.0.5, netmask: 255.255.255.0 }
   - interfaces:
     - "{{ int_if }}"
     - "{{ ext_if }}"
   - openvpn_server_connect_name: 10.10.0.5
 
   roles:
-  - { role: server-openvpn } 
+  - { role: server-openvpn }
 
   tasks:
   - name: set ips
@@ -24,23 +24,23 @@
 
   post_tasks:
   - name: test connectivity - external
-    shell: ping -c 1 -I eth1 10.10.0.200
+    shell: ping -c 1 -I ens5 10.10.0.200
     changed_when: false
     register: ping_ext
     until: ping_ext.stdout.find( "1 packets transmitted, 1 received" ) > -1
     retries: 10
     delay: 3
     tags: tests
-    
+
   - name: test connectivity - internal
-    shell: ping -c 1 -I eth2 10.10.10.200
+    shell: ping -c 1 -I ens6 10.10.10.200
     changed_when: false
     register: ping_int
     until: ping_int.stdout.find( "1 packets transmitted, 1 received" ) > -1
     retries: 10
     delay: 3
     tags: tests
-    
+
   handlers:
   - name: restart networking
     become: yes
@@ -52,14 +52,14 @@
   become_method: sudo
 
   roles:
-  - { role: server-openvpn, include_server: false } 
+  - { role: server-openvpn, include_server: false }
 
   tasks:
   - debug: msg="external client"
 
   post_tasks:
   - name: test connectivity
-    shell: ping -c 1 -I eth1 10.10.0.5
+    shell: ping -c 1 -I ens5 10.10.0.5
     changed_when: false
     register: ping_vpn
     until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1
@@ -91,14 +91,14 @@
   become_method: sudo
 
 #  roles:
-#  - { role: server-openvpn } 
+#  - { role: server-openvpn }
 
   tasks:
   - debug: msg="internal client"
 
   post_tasks:
   - name: test connectivity
-    command: ping -c 1 -I eth1 10.10.10.5
+    command: ping -c 1 -I ens5 10.10.10.5
     changed_when: false
     register: ping_vpn
     until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1

@@ -7,8 +7,8 @@
 
   vars:
   - dhprimes_bitlength: 1024 # sufficient to check if it works.
-  - int_if: { interface: ens6, ip: 10.10.10.5, netmask: 255.255.255.0 }
-  - ext_if: { interface: ens5, ip: 10.10.0.5, netmask: 255.255.255.0 }
+  - int_if: { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
+  - ext_if: { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
   - interfaces:
     - "{{ int_if }}"
     - "{{ ext_if }}"
@@ -17,28 +17,33 @@
   roles:
   - { role: server-openvpn }
 
+  pre_tasks:
+  - name: setup apt
+    become: yes
+    include: tasks/apt.yml
+
   tasks:
   - name: set ips
     become: yes
     include: tasks/setupInterfaces.yml
 
   post_tasks:
-  - name: test connectivity - external
-    shell: ping -c 1 -I ens5 10.10.0.200
+  - name: "test connectivity - external: {{ext_if.interface}}"
+    shell: "ping -c 1 -I {{int_if.interface}} 10.10.0.200"
     changed_when: false
     register: ping_ext
     until: ping_ext.stdout.find( "1 packets transmitted, 1 received" ) > -1
-    retries: 10
-    delay: 3
+    retries: 15
+    delay: 4
     tags: tests
 
-  - name: test connectivity - internal
-    shell: ping -c 1 -I ens6 10.10.10.200
+  - name: "test connectivity - internal: {{int_if.interface}}"
+    shell: "ping -c 1 -I {{int_if.interface}} 10.10.10.200"
     changed_when: false
     register: ping_int
     until: ping_int.stdout.find( "1 packets transmitted, 1 received" ) > -1
-    retries: 10
-    delay: 3
+    retries: 15
+    delay: 4
     tags: tests
 
   handlers:
@@ -51,20 +56,28 @@
   become: no
   become_method: sudo
 
+  vars:
+    interface: eth0
+
   roles:
   - { role: server-openvpn, include_server: false }
+
+  pre_tasks:
+  - name: setup apt
+    become: yes
+    include: tasks/apt.yml
 
   tasks:
   - debug: msg="external client"
 
   post_tasks:
-  - name: test connectivity
-    shell: ping -c 1 -I ens5 10.10.0.5
+  - name: "test connectivity: {{interface}}"
+    shell: "ping -c 1 -I {{interface}} 10.10.0.5"
     changed_when: false
     register: ping_vpn
     until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1
-    retries: 10
-    delay: 3
+    retries: 15
+    delay: 4
     tags: tests
 
   - name: test connectivity through vpn (server)
@@ -72,8 +85,8 @@
     changed_when: false
     register: ping_vpn_tun
     until: ping_vpn_tun.stdout.find( "1 packets transmitted, 1 received" ) > -1
-    retries: 10
-    delay: 3
+    retries: 15
+    delay: 4
     tags: tests
 
   - name: test connectivity through vpn (server-int)
@@ -81,8 +94,8 @@
     changed_when: false
     register: ping_vpn_int
     until: ping_vpn_int.stdout.find( "1 packets transmitted, 1 received" ) > -1
-    retries: 10
-    delay: 3
+    retries: 15
+    delay: 4
     tags: tests
 
 - hosts: server-int
@@ -90,18 +103,46 @@
   become: no
   become_method: sudo
 
+  vars:
+    interface: eth1
+
 #  roles:
 #  - { role: server-openvpn }
 
   tasks:
   - debug: msg="internal client"
 
+  - name: check default route
+    shell: "ip route show | grep default | grep 192.168.121"
+    register: default_gw_check
+    failed_when: False
+    changed_when: false
+
+  - name: delete default gw through upstream
+    become: True
+    command: ip route del 0.0.0.0/0
+    when: not default_gw_check.rc
+
+  - name: set up default gw through vpn server
+    become: True
+    command: ip route add 0.0.0.0/0 via 10.10.10.5
+    when: not default_gw_check.rc
+
   post_tasks:
-  - name: test connectivity
-    command: ping -c 1 -I ens5 10.10.10.5
+  - name: test connectivity to vpn server
+    command: "ping -c 1 -I {{interface}} 10.10.10.5"
     changed_when: false
     register: ping_vpn
     until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1
-    retries: 10
-    delay: 3
+    retries: 15
+    delay: 4
+    tags: tests
+
+  - name: test connectivity - ext server
+    command: "ping -c 1 -I {{interface}} 10.10.0.5"
+    changed_when: false
+    register: ping_vpn
+    until: ping_vpn.stdout.find( "1 packets transmitted, 1 received" ) > -1
+    retries: 15
+    delay: 4
     tags: tests

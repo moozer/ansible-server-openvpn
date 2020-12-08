@@ -1,12 +1,14 @@
 # easy rsa certificate handling
 
-- name: installing easy-rsa
-  #become: yes
-  apt: name={{ item }} state=present
-  with_items: 
-  - easy-rsa
-  - openvpn
+# - name: installing easy-rsa
+#   apt: 
+#     name: [easy-rsa, openvpn] 
+#     state: present
   
+- name: check easy-rsa presence on ansible host (otherwise install 'easy-rsa')
+  shell: 'which make-cadir' 
+  changed_when: false
+
 - name: check easy-rsa state
   stat: path={{ easy_rsa_dir }}
   register: easy_rsa_installed
@@ -15,8 +17,8 @@
   shell: make-cadir "{{ easy_rsa_dir }}"
   when: not easy_rsa_installed.stat.exists
   
-- name: create symlink
-  file: src="openssl-1.0.0.cnf" dest="{{ easy_rsa_dir }}/openssl.cnf" state=link
+#- name: create symlink
+#  file: src="openssl-1.0.0.cnf" dest="{{ easy_rsa_dir }}/openssl.cnf" state=link
 
 - name: create vars file
   template: src=vars.j2 dest="{{ easy_rsa_dir }}/vars"
@@ -25,24 +27,36 @@
   file: state=directory dest={{ easy_rsa_key_dir }} mode=0700
 
 - name: create empty index file
-  command: "touch {{ easy_rsa_key_dir }}/index.txt"
-  args:
-    creates: "{{ easy_rsa_key_dir }}/index.txt"
+  file:
+    path: "{{ easy_rsa_key_dir }}/index.txt"
+    state: touch
+    modification_time: preserve
+    access_time: preserve
 
 - name: create serial minimal serial
   shell: "cd {{ easy_rsa_key_dir }} && echo 01 >> serial"
   args:
     creates: "{{ easy_rsa_key_dir }}/serial"
 
-- name: generate dh file
-  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./build-dh"
+- name: initialise easy rsa pki
+  shell: "cd {{ easy_rsa_dir }} && ./easyrsa init-pki"
   args:
-    creates: "{{ easy_rsa_dh_file }}"
+    creates: "{{ easy_rsa_dir }}/pki"
 
-- name: generate CA key + crt file
-  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --initca"
+- name: "build easy rsa ca (Note: NO password)"
+  shell: "cd {{ easy_rsa_dir }} && ./easyrsa build-ca nopass"
   args:
     creates: "{{ easy_rsa_ca_crt_file }}"
+
+# - name: generate CA key + crt file
+#   shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --initca"
+#   args:
+#     creates: "{{ easy_rsa_ca_crt_file }}"
+
+- name: generate dh file
+  shell: "cd {{ easy_rsa_dir }} && ./easyrsa gen-dh"
+  args:
+    creates: "{{ easy_rsa_dh_file }}"
 
 - name: generate server key file
   shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --server {{ openvpn_server_name }}"

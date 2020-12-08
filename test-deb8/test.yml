@@ -34,7 +34,7 @@
     register: ping_ext
     until: ping_ext.stdout.find( "1 packets transmitted, 1 received" ) > -1
     retries: 15
-    delay: 4
+    delay: 4 
     tags: tests
 
   - name: "test connectivity - internal: {{int_if.interface}}"
@@ -66,7 +66,7 @@
   - name: setup apt
     become: yes
     include: tasks/apt.yml
-
+      
   tasks:
   - debug: msg="external client"
 

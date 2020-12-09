@@ -1,9 +1,9 @@
 # setup openvpn
 
 - name: install openvpn packages
-  apt: name={{ item }} state=present
-  with_items:
-  - openvpn
+  apt: 
+    name: openvpn
+    state: present
 
 - name: generating new dh primes
   shell: openssl dhparam -out {{ dhprimes_file_server }} {{ dhprimes_bitlength }}

@@ -59,7 +59,7 @@
     creates: "{{ easy_rsa_dh_file }}"
 
 - name: generate server key file
-  shell: "cd {{ easy_rsa_dir }} && . ./vars && ./pkitool --server {{ openvpn_server_name }}"
+  shell: "cd {{ easy_rsa_dir }} && ./easyrsa gen-req {{ openvpn_server_name }} nopass"
   args:
     creates: "{{ easy_rsa_server_key_file }}"
 

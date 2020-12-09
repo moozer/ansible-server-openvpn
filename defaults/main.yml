@@ -48,8 +48,8 @@ easy_rsa_keys:
   name: VPN certificates
   alt_name: .
 easy_rsa_key_dir: "{{ easy_rsa_dir }}/keys"
-easy_rsa_ca_key_file: "{{ easy_rsa_key_dir }}/ca.key"
-easy_rsa_ca_crt_file: "{{ easy_rsa_key_dir }}/ca.crt"
+easy_rsa_ca_key_file: "{{ easy_rsa_dir }}/pki/private/ca.key"
+easy_rsa_ca_crt_file: "{{ easy_rsa_dir }}/pki/ca.crt"
 easy_rsa_server_key_file: "{{ easy_rsa_key_dir }}/{{ openvpn_server_name }}.key"
 easy_rsa_server_crt_file: "{{ easy_rsa_key_dir }}/{{ openvpn_server_name }}.crt"
 easy_rsa_ta_crt_file: "{{ easy_rsa_key_dir }}/ta.key"

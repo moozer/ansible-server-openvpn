@@ -30,14 +30,18 @@
   file: path={{ openvpn_log_dir }} state=directory recurse=true
 
 - name: create empty log file
-  command: "touch {{ openvpn_log_dir }}/{{ openvpn_log_file }}"
-  args:
-    creates: "{{ openvpn_log_dir }}/{{ openvpn_log_file }}"
+  file:
+    path: "{{ openvpn_log_dir }}/{{ openvpn_log_file }}"
+    state: touch
+    modification_time: preserve
+    access_time: preserve
 
 - name: create empty status log file
-  command: "touch {{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
-  args:
-    creates: "{{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
+  file:
+    path: "{{ openvpn_log_dir }}/{{ openvpn_status_log_file }}"
+    state: touch
+    modification_time: preserve
+    access_time: preserve
 
 - name: enable openvpn service
   service: name="openvpn@{{ openvpn_conf_name }}" enabled=yes

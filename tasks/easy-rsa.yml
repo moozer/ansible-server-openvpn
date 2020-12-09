@@ -23,20 +23,19 @@
 - name: create vars file
   template: src=vars.j2 dest="{{ easy_rsa_dir }}/vars"
 
-- name: create keys dir
-  file: state=directory dest={{ easy_rsa_key_dir }} mode=0700
+# - name: create keys dir
+#   file: state=directory dest={{ easy_rsa_key_dir }} mode=0700
+# - name: create empty index file
+#   file:
+#     path: "{{ easy_rsa_key_dir }}/index.txt"
+#     state: touch
+#     modification_time: preserve
+#     access_time: preserve
 
-- name: create empty index file
-  file:
-    path: "{{ easy_rsa_key_dir }}/index.txt"
-    state: touch
-    modification_time: preserve
-    access_time: preserve
-
-- name: create serial minimal serial
-  shell: "cd {{ easy_rsa_key_dir }} && echo 01 >> serial"
-  args:
-    creates: "{{ easy_rsa_key_dir }}/serial"
+# - name: create serial minimal serial
+#   shell: "cd {{ easy_rsa_key_dir }} && echo 01 >> serial"
+#   args:
+#     creates: "{{ easy_rsa_key_dir }}/serial"
 
 - name: initialise easy rsa pki
   shell: "cd {{ easy_rsa_dir }} && ./easyrsa init-pki"
@@ -62,6 +61,12 @@
   shell: "cd {{ easy_rsa_dir }} && ./easyrsa gen-req {{ openvpn_server_name }} nopass"
   args:
     creates: "{{ easy_rsa_server_key_file }}"
+
+- name: generate server crt file
+  shell: "cd {{ easy_rsa_dir }} && ./easyrsa sign-req server {{ openvpn_server_name }}"
+  args:
+    creates: "{{ easy_rsa_server_crt_file }}"
+
 
 - name: generate HMAC key file
   shell: /usr/sbin/openvpn --genkey --secret {{ easy_rsa_ta_crt_file }}

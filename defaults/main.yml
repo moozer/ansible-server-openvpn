@@ -57,4 +57,4 @@ easy_rsa_ta_crt_file: "{{ easy_rsa_key_dir }}/ta.key"
 easy_rsa_dh_file: "{{ easy_rsa_dir }}/pki/dh.pem"
 
 easy_rsa_client_name: "{{ inventory_hostname }}"
-easy_rsa_client_bundle: "{{easy_rsa_dir}}/keys/{{ easy_rsa_client_name }}.tgz"
+easy_rsa_client_bundle: "{{easy_rsa_dir}}/pki/{{ easy_rsa_client_name }}.tgz"

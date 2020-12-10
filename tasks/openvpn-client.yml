@@ -12,8 +12,9 @@
   apt: name=openvpn state=present
 
 - name: copy to client
-  copy: src="{{ easy_rsa_client_bundle }}"
-        dest="/etc/openvpn/{{ easy_rsa_client_name }}.tgz"
+  copy: 
+    src: "{{ easy_rsa_client_bundle }}"
+    dest: "/etc/openvpn/{{ easy_rsa_client_name }}.tgz"
 
 - name: extract files
   unarchive: src="/etc/openvpn/{{ easy_rsa_client_name }}.tgz"

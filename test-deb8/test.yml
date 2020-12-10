@@ -6,9 +6,9 @@
   become_method: sudo
 
   vars:
-  - dhprimes_bitlength: 1024 # sufficient to check if it works.
-  - int_if: { interface: eth2, ip: 10.10.10.5, netmask: 255.255.255.0 }
-  - ext_if: { interface: eth1, ip: 10.10.0.5, netmask: 255.255.255.0 }
+  - dhprimes_bitlength: 2048 # sufficient to check if it works.
+  - int_if: { interface: ens6, ip: 10.10.10.5, netmask: 255.255.255.0 }
+  - ext_if: { interface: ens7, ip: 10.10.0.5, netmask: 255.255.255.0 }
   - interfaces:
     - "{{ int_if }}"
     - "{{ ext_if }}"
@@ -57,7 +57,7 @@
   become_method: sudo
 
   vars:
-    interface: eth0
+    interface: ens6
 
   roles:
   - { role: server-openvpn, include_server: false }
@@ -104,7 +104,7 @@
   become_method: sudo
 
   vars:
-    interface: eth1
+    interface: ens6
 
 #  roles:
 #  - { role: server-openvpn }

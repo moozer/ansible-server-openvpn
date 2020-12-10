@@ -1,10 +1,14 @@
 - name: start openvpn server
   become: yes
-  service: name={{ openvpn_service_server }} state=started
+  service: 
+    name: "{{ openvpn_service_server }}" 
+    state: started
   
 - name: start openvpn client
   become: yes
-  service: name={{ openvpn_service_client }} state=started
+  service: 
+    name: "{{ openvpn_service_client }}"
+    state: started
   
 - name: run rc.local
   become: yes

@@ -20,15 +20,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     server.vm.network :private_network,
       :ip => "10.10.0.5",
+      :auto_config => "false",
       :libvirt__forward_mode => "nat",
       :libvirt__network_name => "LAN_upstream",
       :libvirt__dhcp_enabled => false
 
     server.vm.network :private_network,
       :ip => "10.10.10.5",
+      :auto_config => "false",
       :libvirt__forward_mode => "none",
       :libvirt__network_name => "LAN_A",
       :libvirt__dhcp_enabled => false
+
   end
 
   config.vm.define "server-int" do |server|

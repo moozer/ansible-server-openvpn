@@ -3,3 +3,12 @@
             dest="/etc/network/interfaces.d/{{ item.interface }}"
   with_items: "{{interfaces}}"
   notify: restart networking
+
+#flushing is needed to remov vagrant interface config
+- name: "flush interface{{ext_if.interface}}"
+  shell: "ip addr flush {{ext_if.interface}}"
+  notify: restart networking
+
+- name: "flush interface {{int_if.interface}}"
+  shell: "ip addr flush {{int_if.interface}}"
+  notify: restart networking

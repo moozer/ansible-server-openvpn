@@ -7,8 +7,8 @@
 
   vars:
   - dhprimes_bitlength: 2048 # sufficient to check if it works.
-  - int_if: { interface: ens6, ip: 10.10.10.5, netmask: 255.255.255.0 }
-  - ext_if: { interface: ens7, ip: 10.10.0.5, netmask: 255.255.255.0 }
+  - int_if: { interface: ens7, ip: 10.10.10.5, netmask: 255.255.255.0 }
+  - ext_if: { interface: ens6, ip: 10.10.0.5, netmask: 255.255.255.0 }
   - interfaces:
     - "{{ int_if }}"
     - "{{ ext_if }}"
@@ -29,7 +29,7 @@
 
   post_tasks:
   - name: "test connectivity - external: {{ext_if.interface}}"
-    shell: "ping -c 1 -I {{int_if.interface}} 10.10.0.200"
+    shell: "ping -c 1 -I {{ext_if.interface}} 10.10.0.200"
     changed_when: false
     register: ping_ext
     until: ping_ext.stdout.find( "1 packets transmitted, 1 received" ) > -1

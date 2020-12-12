@@ -1,8 +1,8 @@
-- name: start openvpn server
+- name: restart openvpn server
   become: yes
   service: 
     name: "{{ openvpn_service_server }}" 
-    state: started
+    state: restarted
   
 - name: start openvpn client
   become: yes

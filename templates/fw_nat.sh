@@ -1,5 +1,5 @@
 # OpenVPN
-iptables -A INPUT -i {{ ext_if.interface }} -m state --state NEW -p udp --dport {{ openvpn_port }} -j ACCEPT
+iptables -A INPUT -i {{ ext_if.interface }} -m state --state NEW -p udp --dport {{ openvpn_server_port }} -j ACCEPT
 
 # Allow TUN interface connections to OpenVPN server
 iptables -A INPUT -i tun+ -j ACCEPT

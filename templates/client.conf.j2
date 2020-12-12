@@ -3,7 +3,7 @@ client
 dev tun
 proto udp
 
-remote {{ openvpn_server_connect_name }} {{ openvpn_port }}
+remote {{ openvpn_server_connect_name }} {{ openvpn_server_connect_port }}
 ;remote my-server-2 1194
 
 resolv-retry infinite

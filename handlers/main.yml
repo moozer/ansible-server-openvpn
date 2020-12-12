@@ -3,13 +3,16 @@
   service: 
     name: "{{ openvpn_service_server }}" 
     state: restarted
+  when: not vpn_just_install
   
 - name: start openvpn client
   become: yes
   service: 
     name: "{{ openvpn_service_client }}"
     state: started
+  when: not vpn_just_install
   
 - name: run rc.local
   become: yes
   shell: "/etc/rc.local"
+  when: not vpn_just_install

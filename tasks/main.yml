@@ -4,17 +4,17 @@
   become: no
   connection: local
   include: easy-rsa.yml
-  when: use_easy_rsa and include_server
+  when: use_easy_rsa and openvpn_include_server
   tags: setup_ca
 
 - name: include openvpn server tasks
   become: yes
   include: openvpn.yml
-  when: include_server
+  when: openvpn_include_server
   tags: install_vpn_server
 
 - name: include openvpn client tasks
   become: yes
   include: openvpn-client.yml
-  when: include_client
+  when: openvpn_include_client
   tags: install_vpn_client

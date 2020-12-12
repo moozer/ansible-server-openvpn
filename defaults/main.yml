@@ -1,9 +1,11 @@
 # default values...
 
-root_common_name: test_openvpn
 
-include_server: true
-include_client: "{{not include_server}}"
+root_common_name: openvpn
+
+openvpn_include_server: true
+openvpn_include_client: "{{not openvpn_include_server}}"
+openvpn_just_install: false # flag for installing, not running handlers and such
 
 # diffie helman primes - to avoid using the default ones
 dhprimes_bitlength: 4096

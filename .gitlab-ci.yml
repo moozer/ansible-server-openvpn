@@ -1,0 +1,14 @@
+variables:
+  PLAYBOOK: test.yml
+
+ansible_syntax_check:
+  image: registry.gitlab.com/moozer/docker-deb-pip:latest
+  before_script:
+  - pip3 install ansible ansible-lint
+  script:
+  - cd tests
+  - echo localhost > ci-inventory
+  - ansible-playbook --syntax-check $PLAYBOOK -i ci-inventory
+  - ansible-lint $PLAYBOOK
+  - ansible-playbook $PLAYBOOK --connection=local -l localhost -i ci-inventory
+  - ansible-playbook $PLAYBOOK --connection=local -l localhost -i ci-inventory | grep -q 'changed=0.*failed=0'

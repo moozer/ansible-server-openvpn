@@ -60,7 +60,7 @@
     interface: ens6
 
   roles:
-  - { role: server-openvpn, include_server: false }
+  - { role: server-openvpn, openvpn_include_server: false }
 
   pre_tasks:
   - name: setup apt

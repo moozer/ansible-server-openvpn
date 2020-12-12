@@ -24,7 +24,7 @@
 
 - name: copy config file to server
   template: src=server.conf.j2 dest={{ openvpn_dir }}/{{ openvpn_conf_name }}.conf
-  notify: start openvpn server
+  notify: restart openvpn server
 
 - name: create log dir
   file: path={{ openvpn_log_dir }} state=directory recurse=true
@@ -44,10 +44,17 @@
     access_time: preserve
 
 - name: enable openvpn service
-  service: name="openvpn@{{ openvpn_conf_name }}" enabled=yes
+  service: 
+    name: "openvpn@{{ openvpn_conf_name }}" 
+    enabled: yes
 
 - name: enable forwarding
-  sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes state=present reload=yes
+  sysctl: 
+    name: "net.ipv4.ip_forward"
+    value: 1 
+    sysctl_set: yes 
+    state: present 
+    reload: yes
 
 - name: check rc.local
   stat: path=/etc/rc.local
@@ -63,7 +70,10 @@
   when: not rc_local_stat.stat.exists
 
 - name: add nat firewall
-  template: src=fw_nat.sh dest=/etc/fw_nat.sh mode=0700
+  template: 
+    src: fw_nat.sh 
+    dest: /etc/fw_nat.sh mode=0700
+  notify: run rc.local
 
 - name: add firewall to startup
   lineinfile: dest=/etc/rc.local line="/etc/fw_nat.sh"

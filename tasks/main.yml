@@ -5,16 +5,16 @@
   connection: local
   include: easy-rsa.yml
   when: use_easy_rsa and include_server
-  tags: ca
+  tags: setup_ca
 
 - name: include openvpn server tasks
   become: yes
   include: openvpn.yml
   when: include_server
-  tags: server
+  tags: install_vpn_server
 
 - name: include openvpn client tasks
   become: yes
   include: openvpn-client.yml
   when: include_client
-  tags: client
+  tags: install_vpn_client

@@ -1,0 +1,19 @@
+galaxy_info:
+  author: moozer
+  description: Sets up an openvpn server and easy rsa on the ansible host
+
+  #company: your company (optional)
+  # If the issue tracker for your role is not on github, uncomment the
+  # next line and provide a value
+  # issue_tracker_url: http://example.com/issue/tracker
+
+  license: GPL-2.0-or-later
+  min_ansible_version: 2.4
+
+  platforms:
+  - name: Debian
+    versions:
+    - 10
+  galaxy_tags: []
+
+dependencies: []
